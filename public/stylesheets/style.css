@@ -1,8 +1,16 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+.gallery {
+    margin: 10px;
+}
+.gallery img {
+    margin-left: 16px;
+}
+#myProgress {
+    width: 100%;
+    background-color: grey;
 }
 
-a {
-  color: #00B7FF;
+#myBar {
+    width: 1%;
+    height: 30px;
+    background-color: #0e8eab;
 }

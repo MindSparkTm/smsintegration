@@ -1,0 +1,40 @@
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>CreatedBy</th>
+            <th>Assignee</th>
+            <th>Priority</th>
+            <th>Time</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tbody>
+        {{#each tickets}}
+            <tr class="rows">
+                <td>{{ this.title }}</td>
+                <td>{{ this.description }}</td>
+                <td>{{ this.createdby }}</td>
+                <td>{{ this.assignee }}</td>
+                <td>{{ this.priority }}</td>
+                <td>{{ this.time }}</td>
+                <td>{{ this.ticketid }}</td>
+
+
+                <td><a class="nav-link active" style="font-family:SansSerif;font-size: 20px;color:#0e8eab" href="/tickettype/details?ticketid={{ this.ticketid }}">View Details</td>
+
+
+            </tr>
+        {{/each}}
+        </tbody>
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+
+</script>
+

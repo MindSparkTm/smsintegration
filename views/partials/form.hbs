@@ -1,0 +1,243 @@
+<form id="ticketform" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="exampleInputEmail1">Title</label>
+        <input type="text" class="form-control" id="title" placeholder="Enter Title">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Description</label>
+        <textarea class="form-control" id="description" rows="3"
+                  placeholder="Enter as much details possible" ></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="exampleFormControlSelect1">Priority </label>
+        <select class="form-control" id="priority">
+            <option value="1">1</option>
+            <option value="2"> 2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="exampleFormControlSelect1">Assignee </label>
+        <select class="form-control" id="assignee">
+            <option value="Isis">Isis</option>
+            <option value="Evan">Evan</option>
+            <option value="Surajit">Surajit</option>
+            <option value="Millie">Millie</option>
+            <option value="Rita">Rita</option>
+            <option value="Sharon">Sharon</option>
+            <option value="Serah">Serah</option>
+            <option value="Millie">Millie</option>
+            <option value="Angel">Angel</option>
+            <option value="Phoebe">Phoebe</option>
+
+
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="exampleFormControlSelect1">Created By </label>
+        <select class="form-control" id="createdby">
+            <option value="Isis">Isis</option>
+            <option value="Evan">Evan</option>
+            <option value="Surajit">Surajit</option>
+            <option value="Millie">Millie</option>
+            <option value="Rita">Rita</option>
+            <option value="Sharon">Sharon</option>
+            <option value="Serah">Serah</option>
+            <option value="Millie">Millie</option>
+            <option value="Angel">Angel</option>
+            <option value="Phoebe">Phoebe</option>
+
+
+        </select>
+    </div>
+
+
+    <div class="upload_button_holder">
+        <input type="file" name="file" class="cloudinary_fileupload" multiple>
+    </div>
+    </br> </br>
+    <div id="myProgress">
+        <div id="myBar">10%</div>
+    </div>
+    <div class="gallery"/>
+    </div>
+    <button type="submit" id="submit_ticket" class="btn btn-primary">Submit Ticket</button></br> </br>
+    <div id="status" style="font-family:SansSerif;font-size: 20px;color:#0e8eab"/>
+    </div>
+</form>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="/javascripts/jquery.ui.widget.js"></script>
+<script src="/javascripts/jquery.iframe-transport.js"></script>
+<script src="/javascripts/jquery.fileupload.js"></script>
+<script src="/javascripts/jquery.cloudinary.js"></script>
+<script src="/javascripts/all.js" type="text/javascript"></script>
+<script src="/javascripts/jquery-ui.js"></script>
+
+<script type="text/javascript">
+
+    const cloudName = '';
+    const unsignedUploadPreset = '';
+    var image_urls = []
+    $.cloudinary.config({
+        cloud_name: cloudName
+    })
+
+    $('.cloudinary_fileupload').unsigned_cloudinary_upload(unsignedUploadPreset, {
+
+
+                cloud_name: cloudName,
+                tags: 'browser_uploads'
+            }, {
+                multiple: true
+            }
+    )
+            .bind('cloudinarydone', function (e, data) {
+                console.log(`data.loaded: ${data.loaded},
+  data.total: ${data.total}`)
+            })
+            .bind('fileuploadprogress', function (e, data) {
+                console.log(`fileuploadprogress data.loaded: ${data.loaded},
+  data.total: ${data.total}`);
+            })
+            .bind('cloudinaryprogress', function (e, data) {
+                move()
+
+                console.log(`cloudinaryprogress data.loaded: ${data.loaded},
+  data.total: ${data.total}`);
+            })
+            .bind('cloudinarydone', function (e, data) {
+                // inspect data.result for return value with link to the uploaded image and more
+                console.log('Upload result', data.result);
+
+                var res = data.result
+
+                image_urls.push(res.secure_url)
+
+                // Create a thumbnail of the uploaded image, with 150px width
+                var image = $.cloudinary.image(
+                        data.result.public_id, {
+                            secure: true,
+                            width: 150,
+                            crop: 'scale'
+                        });
+                $('.gallery').prepend(image);
+            });
+
+
+
+    $('#submit_ticket').click(function (e) {
+        e.preventDefault()
+        $('#myBar').empty()
+        imageurls=[]
+
+        title = $('#title').val()
+        description = $('#description').val()
+        priority = $('#priority option:selected').text()
+        assignee = $('#assignee option:selected').text()
+        createdby = $("#createdby option:selected").text();
+
+
+         if (title.length>0 && description.length>0){
+
+            tickettype = getUrlParameter('tickettype')
+
+            if (tickettype != null) {
+                if (image_urls.length == 0) {
+
+                    postData = JSON.stringify({
+                        "title": title,
+                        "description": description,
+                        "priority": priority,
+                        "assignee": assignee,
+                        "createdby": createdby,
+                        "tickettype": tickettype
+
+                    })
+
+                } else {
+                    postData = JSON.stringify({
+                        "title": title,
+                        "description": description,
+                        "priority": priority,
+                        "assignee": assignee,
+                        "createdby": createdby,
+                        "tickettype": tickettype,
+                        "imageurls": image_urls
+
+                    })
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: "tickettype/create",
+                    data: postData,
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function (resultData) {
+                        $('#status').empty()
+                        $('#status').append('Ticket Successfully Created')
+                        $('#ticketform').trigger("reset")
+                        $('.gallery').empty()
+                    },
+
+                    error: function (error) {
+                        $('#status').empty()
+                        $('#status').append('Please Contact Surajit. He is the only one who can fix this error')
+                    }
+                });
+            }
+
+
+
+        }
+
+        else{
+
+            alert('Please enter all the details before submitting')
+        }
+
+
+    })
+
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            }
+        }
+    };
+
+    function move() {
+        $('#submit_ticket').prop("disabled", true);
+        var elem = document.getElementById("myBar");
+        var width = 10;
+        var id = setInterval(frame, 10);
+        function frame() {
+            if (width >= 100) {
+                clearInterval(id);
+            } else {
+                width++;
+                elem.style.width = width + '%';
+                elem.innerHTML = width * 1 + '%';
+            }
+        }
+
+        $('#submit_ticket').prop("disabled", false);
+
+    }
+
+</script>

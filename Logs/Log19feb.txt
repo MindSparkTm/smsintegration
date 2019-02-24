@@ -1,0 +1,11 @@
+1. Created the basic skeleton of the project
+2. Partial directory set up and placed the partial views inside them
+3. Use handlebar renderpartials to render the partials in the templates.
+4. The entire UI architecture has been set up
+
+1. header
+2. footer
+3. navbar
+4. table
+5. form
+6. button

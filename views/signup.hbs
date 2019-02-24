@@ -1,0 +1,98 @@
+
+<!------ Include the above in your HEAD tag ---------->
+
+<html>
+<head>
+    <link rel='stylesheet' href='/stylesheets/bootstrap/bootstrap.min.css'/>
+    <script src="/javascripts/bootstrap/bootstrap.min.js"></script>
+    <script src="/javascripts/jquery.min.js"></script>
+    <link rel="shortcut icon" type="image/png" href="/images/favicon.png"/>
+
+    <body>
+<form class="form-horizontal">
+    <fieldset>
+        <div id="legend">
+            <legend class="">Register</legend>
+        </div>
+        <div class="control-group">
+            <!-- Username -->
+            <label class="control-label"  for="username">Username</label>
+            <div class="controls">
+                <input type="text" id="username" name="username" placeholder="" class="input-xlarge">
+                <p class="help-block">Username can contain any letters or numbers, without spaces</p>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <!-- E-mail -->
+            <label class="control-label" for="email">E-mail</label>
+            <div class="controls">
+                <input type="text" id="email" name="email" placeholder="" class="input-xlarge">
+                <p class="help-block">Please provide your E-mail</p>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <!-- Password-->
+            <label class="control-label" for="password">Password</label>
+            <div class="controls">
+                <input type="password" id="password" name="password" placeholder="" class="input-xlarge">
+                <p class="help-block">Password should be at least 4 characters</p>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <!-- Password -->
+            <label class="control-label"  for="password_confirm">Password (Confirm)</label>
+            <div class="controls">
+                <input type="password" id="passwordConf" name="password_confirm" placeholder="" class="input-xlarge">
+                <p class="help-block">Please confirm password</p>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <!-- Button -->
+            <div class="controls">
+                <button class="btn btn-success" id="registerbtn">Register</button>
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+<script type="text/javascript">
+
+
+    $('#registerbtn').click(function (e) {
+        email = $('#email').val()
+        username = $('#username').val()
+        password = $('#password').val()
+        passwordConf = $('#passwordConf').val()
+
+        postData = JSON.stringify({'email':email,'username':username,'password':password,'passwordConf':passwordConf})
+        console.log('postdata',postData)
+        e.preventDefault()
+        alert('clicked')
+        $.ajax({
+            type: 'POST',
+            url: "/mv/signup",
+            data: postData,
+            dataType: "json",
+            contentType: "application/json",
+            success: function (resultData) {
+                console.log('result',resultData)
+            },
+
+            error: function (error) {
+                console.log('error',error)
+            }
+        })
+
+    })
+
+
+</script>
+
+     </body>
+</head>
+</html>
+

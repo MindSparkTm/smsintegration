@@ -1,0 +1,113 @@
+<h1>{{ticketmessage}}</h1>
+
+<form class="form-control">
+    <ul class="list-group">
+
+        <input type="hidden" class="form-control" id="ticketid" value="{{ticket.ticketid}}"/>
+        <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Ticketid:</label>
+            &nbsp;{{ticket.ticketid}}</li>
+        <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Title:</label>
+            &nbsp; <input type="text" class="form-control" id="title" value="{{ticket.title}}"/></li>
+        <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">
+            Description:</label> &nbsp; <textarea id="description" class="form-control">{{ticket.description}}</textarea>
+            &nbsp;
+        </li>
+        <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Priority:</label>
+            &nbsp; <input type="text" id="priority" class="form-control" value="{{ticket.priority}}"/></li>
+        <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Assignee:</label>
+            &nbsp; <input type="text" id="assignee" class="form-control" value="{{ticket.assignee}}"/>&nbsp;
+        </li>
+        <li class="list-group-item"><label
+                style="font-family:SansSerif;font-size: 20px;color:#0e8eab">CreatedBy:</label> &nbsp;<input type="text" id="createdBy" class="form-control" value="{{ticket.createdby}}"/>
+        </li>
+        <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Current
+            Status:</label> &nbsp;<input type="text" class="form-control" id="status" value="{{ticket.status}}"/><span
+                class="badge badge-secondary">Available status :- Created,In Progress,Completed</span></li>
+
+        <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Time:</label>
+            &nbsp;{{ticket.time}}</li>
+
+
+    </ul>
+
+    <div id="status" style="font-family:SansSerif;font-size: 20px;color:#0e8eab"/>
+    </div>
+    <button type="button" id="update_btn" class="btn btn-primary" style="background-color:#17a2b8">Update</button>
+</br>
+
+</form>
+
+{{#each ticket.imageurls}}
+    <div class="img-zoom-container">
+        <img id="myimage" src="{{this}}" width="480" height="640" alt="image" onclick="imageZoom(this)">
+        <div id="myresult" class="img-zoom-result"></div>
+    </div>
+{{/each}}
+
+<div id="disqus_thread"></div>
+<script>
+
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://mvsdesk.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+<script type="text/javascript">
+
+    $('#update_btn').click(function (e) {
+        e.preventDefault()
+
+        ticketid = $('#ticketid').val()
+
+
+        title = $('#title').val()
+        description = $('#description').val()
+        assignee = $('#assignee').val()
+        priority = $('#priority').val()
+        status = $('#status').val()
+
+        postData = JSON.stringify({
+            'ticketid': ticketid,
+            'title': title,
+            'description': description,
+            'assignee': assignee,
+            'priority': priority,
+            'status': status
+        })
+
+        $.ajax({
+            type: 'POST',
+            url: "/tickettype/updateticket",
+            data: postData,
+            dataType: "json",
+            contentType: "application/json",
+            success: function (resultData) {
+
+                alert('Update Successful')
+                location.reload();
+
+            },
+
+            error: function (error) {
+              alert('Update failed. Please contact surajit')
+            }
+        });
+
+    })
+
+
+
+</script>

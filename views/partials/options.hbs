@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Create two equal columns that floats next to each other */
+        .coli {
+            float: left;
+            width: 50%;
+            padding: 10px;
+        }
+
+        /* Clear floats after the columns */
+        .ri:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        /* Style the buttons */
+        .btni {
+            border: none;
+            outline: none;
+            padding: 12px 16px;
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+
+        .btni:hover {
+            background-color: #ddd;
+        }
+
+        .btni.active {
+            background-color: #666;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+
+
+<div class="ri">
+    <div class="coli" style="background-color:#ffff;">
+        <h2>View Support Tickets</h2>
+        <a id ="support"  style="font-family:SansSerif;font-size: 20px;color:#6ec1e4"  class="nav-link" href="/tickettype/test?tickettype=Support"><strong>Support</strong></a>
+    </div>
+    <div class="coli" style="background-color:#ffff;">
+        <h2>View Functionality Tickets</h2>
+        <a id ="functionality" style="font-family:SansSerif;font-size: 20px;color:#6ec1e4"   class="nav-link" href="/tickettype/test?tickettype=Functionality"><strong>Functionality</strong></a>
+    </div>
+</div>
+
+<div class="ri">
+    <div class="coli" style="background-color:#ffff;">
+        <h2>View UI Tickets</h2>
+        <a id ="ui" style="font-family:SansSerif;font-size: 20px;color:#6ec1e4"  class="nav-link" href="/tickettype/test?tickettype=UI"><strong>UI</strong></a>
+    </div>
+    <div class="coli" style="background-color:#ffff;">
+        <h2>View UX Tickets</h2>
+        <a id ="ux" style="font-family:SansSerif;font-size: 20px;color:#6ec1e4"   class="nav-link" href="/tickettype/test?tickettype=UX"><strong>UX</strong></a>
+    </div>
+</div>
+
+<div class="ri">
+    <div class="coli" style="background-color:#ffff;">
+        <h2>View NewFeature Tickets</h2>
+        <a id ="newfeature" style="font-family:SansSerif;font-size: 20px;color:#6ec1e4"  class="nav-link" href="/tickettype/test?tickettype=Newfeature"><strong>New Feature</strong></a>
+    </div>
+
+</div>
+
+<script>
+    // Get the elements with class="column"
+    var elements = document.getElementsByClassName("coli");
+
+    // Declare a loop variable
+    var i;
+
+
+    // Grid View
+    function gridView() {
+        for (i = 0; i < elements.length; i++) {
+            elements[i].style.width = "50%";
+        }
+    }
+
+
+</script>
+
+</body>
+</html>
