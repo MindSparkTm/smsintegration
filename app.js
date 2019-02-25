@@ -42,6 +42,8 @@ app.use('/tickettype', ticketRouter);
 app.use('/support', loginRouter);
 app.use('/mv', signupRouter);
 
+const port=4000
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
 
 
@@ -60,6 +62,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 
 
 var hbs = require('hbs');
