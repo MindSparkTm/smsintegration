@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="1d1835bf-0ca5-4ba7-9aba-1f9c42afe89b" name="Default Changelist" comment="" />
+=======
+    <list default="true" id="1d1835bf-0ca5-4ba7-9aba-1f9c42afe89b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/partials/display.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/display.hbs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/partials/navbar.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/navbar.hbs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/partials/options.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/options.hbs" afterDir="false" />
+    </list>
+>>>>>>> new_feature_task
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -277,12 +286,20 @@
       <workItem from="1550408219965" duration="43980000" />
       <workItem from="1550819263489" duration="46100000" />
       <workItem from="1551008477528" duration="29919000" />
+<<<<<<< HEAD
       <workItem from="1551079897772" duration="2568000" />
+=======
+      <workItem from="1551079897772" duration="2225000" />
+>>>>>>> new_feature_task
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="189185000" />
+=======
+    <option name="totallyTimeSpent" value="188842000" />
+>>>>>>> new_feature_task
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
