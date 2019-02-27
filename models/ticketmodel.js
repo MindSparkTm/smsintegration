@@ -18,24 +18,73 @@ var ticketSchema = new mongoose.Schema({
      _tickets = mongoose.model('tickets', ticketSchema)
 
 
-     exports.ticketobject = function (tickettype,callback) {
-
-         _tickets.find({'tickettype': tickettype},function (err, tickets) {
-             if (err) {
-                 console.log(err)
-
-                 return callback(err)
-             } else {
-
-                 console.log(tickets.length)
-
-                 return callback(tickets);
+     exports.ticketobject = function (tickettype,username,callback) {
 
 
-             }
+         if (tickettype == 'mytask') {
 
-         })
+             console.log('mytaskhas bee called',username)
 
+             // search by username
+             _tickets.find({'assignee': username,"tickettype":"task"},function (err, tickets) {
+                 if (err) {
+                     console.log(err)
+
+                     return callback(err)
+                 } else {
+
+                     console.log(tickets.length)
+
+                     return callback(tickets);
+
+
+                 }
+
+             })
+
+         }
+
+
+         if (tickettype == 'myticket') {
+
+
+             _tickets.find({"assignee": username ,"tickettype": ['UI','UX','Support','Functionality','Newfeature']},function (err, tickets) {
+                 if (err) {
+                     console.log(err)
+
+                     return callback(err)
+                 } else {
+
+                     console.log(tickets.length)
+
+                     return callback(tickets);
+
+
+                 }
+
+             })
+
+         }
+
+
+         else {
+
+             _tickets.find({'tickettype': tickettype}, function (err, tickets) {
+                 if (err) {
+                     console.log(err)
+
+                     return callback(err)
+                 } else {
+
+                     console.log(tickets.length)
+
+                     return callback(tickets);
+
+
+                 }
+
+             })
+         }
      }
 
 

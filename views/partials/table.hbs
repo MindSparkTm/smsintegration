@@ -8,11 +8,16 @@
             <th>Assignee</th>
             <th>Priority</th>
             <th>Time</th>
+            <th>Current Status</th>
+            <th>Tickettype</th>
+
 
         </tr>
         </thead>
         <tbody>
         <tbody>
+
+    {{#if tickets}}
         {{#each tickets}}
             <tr class="rows">
                 <td>{{ this.title }}</td>
@@ -21,7 +26,9 @@
                 <td>{{ this.assignee }}</td>
                 <td>{{ this.priority }}</td>
                 <td>{{ this.time }}</td>
-                <td>{{ this.ticketid }}</td>
+                <td>{{ this.status }}</td>
+                <td>{{ this.tickettype }}</td>
+
 
 
                 <td><a class="nav-link active" style="font-family:SansSerif;font-size: 20px;color:#0e8eab" href="/tickettype/details?ticketid={{ this.ticketid }}">View Details</td>
@@ -29,6 +36,28 @@
 
             </tr>
         {{/each}}
+        {{else}}
+
+        {{#each tasks}}
+            <tr class="rows">
+                <td>{{ this.title }}</td>
+                <td>{{ this.description }}</td>
+                <td>{{ this.createdby }}</td>
+                <td>{{ this.assignee }}</td>
+                <td>{{ this.priority }}</td>
+                <td>{{ this.time }}</td>
+                <td>{{ this.status }}</td>
+
+
+                <td><a class="nav-link active" style="font-family:SansSerif;font-size: 20px;color:#0e8eab" href="/tickettype/taskinfo?taskid={{ this.taskid }}">View Details</td>
+
+
+            </tr>
+        {{/each}}
+
+
+{{/if}}
+
         </tbody>
         </tbody>
     </table>

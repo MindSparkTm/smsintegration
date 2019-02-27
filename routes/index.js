@@ -15,18 +15,7 @@ router.get('/',mid.requiresLogin, function (req, res, next) {
 
 router.post('/', function (req, res, next) {
 
-    userid = uuid.v1(); // -> '6c84fb90-12c4-11e1-840d-7b25c5ee775a'
-    user_name = req.body.name
-    email = req.body.email
-    password = req.body.password
-    var dt = dateTime.create();
-    var formatted = dt.format('Y-m-d H:M:S');
-    userModel = new Users({userid:userid, name: user_name, email: email, password: password, time: formatted})
 
-    userModel.save(function (err, response) {
-        if (err) return console.error(err);
-        console.log(response)
-    });
 
 
     const sgMail = require('@sendgrid/mail');

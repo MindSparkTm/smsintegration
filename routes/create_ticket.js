@@ -1,5 +1,7 @@
 var express = require('express');
 var tickets = require('../models/ticketmodel')
+var tasks = require('../models/taskmodel')
+
 var uuid = require('uuid');
 var dateTime = require('node-datetime');
 mid = require('../common/requireslogin')
@@ -62,11 +64,77 @@ router.post('/create',mid.requiresLogin, function (req, res, next) {
     });
 })
 
+
+router.post('/createtask',mid.requiresLogin, function (req, res, next) {
+
+    taskid = uuid.v1();
+
+    title = req.body.title
+
+    description = req.body.description
+
+    createdby = req.body.createdby
+
+    assignee = req.body.assignee
+
+    priority = req.body.priority
+
+    imageurls = req.body.imageurls
+
+    var dt = dateTime.create();
+    formatted = dt.format('Y-m-d H:M:S');
+
+
+    taskmodel = new tasks.task({
+        taskid: taskid,
+        title: title,
+        description: description,
+        createdby: createdby,
+        assignee: assignee,
+        priority: priority,
+        imageurls: imageurls,
+    })
+
+
+    taskmodel.save(function (err, response) {
+        if (err) {
+            console.log('error', err)
+            console.log(err)
+            res.end('{"response": "Error"}')
+
+        } else {
+            console.log(response)
+            res.end('{"response": "Success"}')
+        }
+    });
+})
+
+router.get('/taskdetails',mid.requiresLogin, function (req, res, next) {
+    var username = req.session.username
+
+
+
+
+    tasks.taskobject(username,function (response) {
+        console.log('reso',response)
+
+        res.render('test.hbs', {'message':'Current Tickets','tasks': response,'table':'success'})
+
+    })
+})
+
+
 router.get('/test',mid.requiresLogin, function (req, res, next) {
         console.log('testst')
         var tickettype = req.query.tickettype
+        var username = req.session.username
 
-    tickets.ticketobject(tickettype,function (response) {
+    console.log('username',username)
+
+
+
+    tickets.ticketobject(tickettype,username,function (response) {
+        console.log('reso',response)
 
         res.render('test.hbs', {'message':'Current Tickets','tickets': response,'table':'success'})
 
@@ -87,6 +155,20 @@ router.get('/details',mid.requiresLogin, function (req, res, next) {
     tickets.singleticket(ticketid,function (response) {
 
         res.render('test.hbs', {'single':'Tickets','ticket': response,'ticketmessage':'Displaying Ticket Details'})
+
+
+    })
+
+})
+
+router.get('/taskinfo', function (req, res, next) {
+
+    var taskid = req.query.taskid
+    console.log('Taskid',taskid)
+    tasks.singletask(taskid,function (response) {
+        console.log('single task details',response)
+
+        res.render('test.hbs', {'single':'task','task': response,'ticketmessage':'Displaying Task Details'})
 
 
     })

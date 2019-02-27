@@ -1,50 +1,104 @@
 <h1>{{ticketmessage}}</h1>
 
-<form class="form-control">
-    <ul class="list-group">
+{{#if ticket}}
+    <form class="form-control">
+        <ul class="list-group">
 
-        <input type="hidden" class="form-control" id="ticketid" value="{{ticket.ticketid}}"/>
-        <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Ticketid:</label>
-            &nbsp;{{ticket.ticketid}}</li>
-        <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Title:</label>
-            &nbsp; <input type="text" class="form-control" id="title" value="{{ticket.title}}"/></li>
-        <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">
-            Description:</label> &nbsp; <textarea id="description" class="form-control">{{ticket.description}}</textarea>
-            &nbsp;
-        </li>
-        <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Priority:</label>
-            &nbsp; <input type="text" id="priority" class="form-control" value="{{ticket.priority}}"/></li>
-        <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Assignee:</label>
-            &nbsp; <input type="text" id="assignee" class="form-control" value="{{ticket.assignee}}"/>&nbsp;
-        </li>
-        <li class="list-group-item"><label
-                style="font-family:SansSerif;font-size: 20px;color:#0e8eab">CreatedBy:</label> &nbsp;<input type="text" id="createdBy" class="form-control" value="{{ticket.createdby}}"/>
-        </li>
-        <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Current
-            Status:</label> &nbsp;<input type="text" class="form-control" id="status" value="{{ticket.status}}"/><span
-                class="badge badge-secondary">Available status :- Created,In Progress,Completed</span></li>
-
-
-
-        <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Time:</label>
-            &nbsp;{{ticket.time}}</li>
+            <input type="hidden" class="form-control" id="ticketid" value="{{ticket.ticketid}}"/>
+            <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Ticketid:</label>
+                &nbsp;{{ticket.ticketid}}</li>
+            <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Title:</label>
+                &nbsp; <input type="text" class="form-control" id="title" value="{{ticket.title}}"/></li>
+            <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">
+                Description:</label> &nbsp; <textarea id="description" class="form-control">{{ticket.description}}</textarea>
+                &nbsp;
+            </li>
+            <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Priority:</label>
+                &nbsp; <input type="text" id="priority" class="form-control" value="{{ticket.priority}}"/></li>
+            <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Assignee:</label>
+                &nbsp; <input type="text" id="assignee" class="form-control" value="{{ticket.assignee}}"/>&nbsp;
+            </li>
+            <li class="list-group-item"><label
+                    style="font-family:SansSerif;font-size: 20px;color:#0e8eab">CreatedBy:</label> &nbsp;<input type="text" id="createdBy" class="form-control" value="{{ticket.createdby}}"/>
+            </li>
+            <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Current
+                Status:</label> &nbsp;<input type="text" class="form-control" id="status" value="{{ticket.status}}"/><span
+                    class="badge badge-secondary">Available status :- Created,In Progress,Completed</span></li>
 
 
-    </ul>
 
-    <div id="status" style="font-family:SansSerif;font-size: 20px;color:#0e8eab"/>
-    </div>
-    <button type="button" id="update_btn" class="btn btn-primary" style="background-color:#17a2b8">Update</button>
-</br>
+            <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Time:</label>
+                &nbsp;{{ticket.time}}</li>
 
-</form>
 
-{{#each ticket.imageurls}}
-    <div class="img-zoom-container">
-        <img id="myimage" src="{{this}}" width="480" height="640" alt="image" onclick="imageZoom(this)">
-        <div id="myresult" class="img-zoom-result"></div>
-    </div>
-{{/each}}
+        </ul>
+
+        <div id="status" style="font-family:SansSerif;font-size: 20px;color:#0e8eab"/>
+        </div>
+        <button type="button" id="update_btn" class="btn btn-primary" style="background-color:#17a2b8">Update</button>
+        </br>
+
+    </form>
+
+    {{#each ticket.imageurls}}
+        <div class="img-zoom-container">
+            <img id="myimage" src="{{this}}" width="480" height="640" alt="image" onclick="imageZoom(this)">
+            <div id="myresult" class="img-zoom-result"></div>
+        </div>
+    {{/each}}
+
+
+{{else}}
+
+    <form class="form-control">
+        <ul class="list-group">
+
+            <input type="hidden" class="form-control" id="ticketid" value="{{task.taskid}}"/>
+            <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Taskid:</label>
+                &nbsp;{{ticket.ticketid}}</li>
+            <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Title:</label>
+                &nbsp; <input type="text" class="form-control" id="title" value="{{task.title}}"/></li>
+            <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">
+                Description:</label> &nbsp; <textarea id="description" class="form-control">{{task.description}}</textarea>
+                &nbsp;
+            </li>
+            <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Priority:</label>
+                &nbsp; <input type="text" id="priority" class="form-control" value="{{task.priority}}"/></li>
+            <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Assignee:</label>
+                &nbsp; <input type="text" id="assignee" class="form-control" value="{{task.assignee}}"/>&nbsp;
+            </li>
+            <li class="list-group-item"><label
+                    style="font-family:SansSerif;font-size: 20px;color:#0e8eab">CreatedBy:</label> &nbsp;<input type="text" id="createdBy" class="form-control" value="{{task.createdby}}"/>
+            </li>
+            <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Current
+                Status:</label> &nbsp;<input type="text" class="form-control" id="status" value="{{task.status}}"/><span
+                    class="badge badge-secondary">Available status :- Created,In Progress,Completed</span></li>
+
+
+
+            <li class="list-group-item"><label style="font-family:SansSerif;font-size: 20px;color:#0e8eab">Time:</label>
+                &nbsp;{{task.time}}</li>
+
+
+        </ul>
+
+        <div id="status" style="font-family:SansSerif;font-size: 20px;color:#0e8eab"/>
+        </div>
+        <button type="button" id="update_btn" class="btn btn-primary" style="background-color:#17a2b8">Update</button>
+        </br>
+
+    </form>
+
+    {{#each ticket.imageurls}}
+        <div class="img-zoom-container">
+            <img id="myimage" src="{{this}}" width="480" height="640" alt="image" onclick="imageZoom(this)">
+            <div id="myresult" class="img-zoom-result"></div>
+        </div>
+    {{/each}}
+
+{{/if}}
+
+
 
 <div id="disqus_thread"></div>
 <script>
