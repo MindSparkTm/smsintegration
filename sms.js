@@ -1,9 +1,8 @@
 const express = require('express')
-const query = require("express").query;
 const app = express()
 const port = 3000
-var dateTime = require('node-datetime');
-const fs = require('fs');
+const bodyParser = require("body-parser");
+var request=require('request');
 
 const options = {
     apiKey: '',         // use your sandbox app API key for development in the test environment
@@ -15,172 +14,113 @@ africastalking = require('africastalking')(options);
 sms = africastalking.SMS
 
 // Use the service
-
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 // Send message and capture the response or error
+app.use(express.json());
 
-app.get('/smslogs',function (req,res) {
+app.post('/smswebhook',function (req,res) {
 
-    res.download('smslogs.txt')
+    fulfillment_id = req.body.fulfillment.id
+    order_id = req.body.fulfillment.order_id
+    console.log('fulffill',fulfillment_id,order_id)
+
+    if (fulfillment_id && order_id){
+        call_order_endpoint(fulfillment_id,order_id,function (err,result) {
+            console.log('error',err)
+            console.log('result',result)
+            if (err==null){
+                result = JSON.parse(result)
+                phoneNumber = result.order.phone_number
+                if (phoneNumber.includes('+254')){
+                    phoneNumber = phoneNumber
+                }
+                if (phoneNumber.startsWith('0')){
+                    phoneNumber = phoneNumber.replace('0','')
+                    phoneNumber = '+254'+phoneNumber
+                }
+                payment_status = result.order.payment_status
+                total = result.order.total
+
+                if (payment_status=='unpaid'){
+                    console.log('pho',phoneNumber,payment_status,total)
+                    //trigger sms
+                    send_sms(phoneNumber,total,fulfillment_id,'unpaid')
+                }
+
+                if (payment_status=='paid'){
+                    send_sms(phoneNumber,total,fulfillment_id,'paid')
+
+                }
+
+            }
+
+        })
+
+    }
 
 })
 
-app.post('/', function (req, res) {
+function send_sms(phoneNumber,total,shipment_id,payment_status){
+    console.log('p',phoneNumber)
 
-    shipmentstatus = req.query.shipmentstatus
-    customername = req.query.customername
-    mobilenumber = req.query.phonenumber
-    amount = req.query.price
-    invoicenumber = req.query.invoicenumber
-    var dt = dateTime.create();
-    var formatted = dt.format('Y-m-d H:M:S');
-    statuscode = '400'
+    if (payment_status=='unpaid'){
+         data = {
+            to: phoneNumber,
+            message: "Hi there ,Your order has been shipped. Invoice number"+ shipment_id+". Please have MPesa ready, Ksh "+total+", to pay via Buy Goods, Till Number 339233."
+        }
+    }
 
-    if(shipmentstatus && customername && mobilenumber && amount && invoicenumber){
-        mobilenumber = '+' + mobilenumber //format the phonenumber to be sent in AT format
-
-        const data = {
-            to: mobilenumber,
-            message: "Hi there , "+customername+".Your order has been "+shipmentstatus + ", Shipment Number-"+ invoicenumber+". Please have MPesa ready, Ksh "+amount+", to pay via Buy Goods, Till Number 339233."
+    if (payment_status=='paid'){
+         data = {
+            to: phoneNumber,
+            message: "Hi there ,Your order has been shipped. Invoice number "+shipment_id +"Thank you for shopping with MumsVillage"
         }
 
-        console.log(data)
-
-        sms.send(data)
-            .then(resp => {
-                console.log(resp);
-                var arr = resp.SMSMessageData.Recipients
-
-
-
-                var cost = arr[0].cost
-                var messageid = arr[0].messageId
-                var phonenumber = arr[0].number
-                var status_response = arr[0].status
-                var status_code = arr[0].statusCode
-
-
-
-                formatted_text = 'statuscode'+"\t"+status_code+"\t"+"recipent_number"+"\t"+phonenumber+"\t"+"cost"+"\t"+cost+"\t"+"messageid"+"\t"+messageid+"\t"+"timeStamp"+"\t"+formatted+"\n"
-
-
-
-                fs.writeFile("smslogs.txt", formatted_text,{ flag: "a" }, function(err) {
-                    if(err) {
-                        return console.log(err);
-                    }
-
-                    console.log("The file was saved!");
-                });
-
-
-
-                response = {'statuscode':'200','response':resp}
-
-
-
-
-                res.send(response)
-
-            })
-            .catch(error => {
-
-                console.log('error',error)
-
-                error_response = {'statuscode':'500', response:'error'}
-                res.send(error_response)
-            })
-
     }
-
-    else{
-        bad_request = {'statuscode':'400','response':'Bad request'}
-
-        res.send(bad_request)
-
-
-    }
+    sms.send(data)
+        .then(resp => {
+            var arr = resp.SMSMessageData.Recipients
 
 
 
+            var cost = arr[0].cost
+            var messageid = arr[0].messageId
+            var phonenumber = arr[0].number
+            var status_response = arr[0].status
+            var status_code = arr[0].statusCode
 
+            console.log('resp',resp)
 
-});
+        })
+        .catch(error => {
+            console.log('errpr',error)
 
-app.post('/pesapal', function (req, res) {
+        })
 
-    shipmentstatus = req.query.shipmentstatus
-    customername = req.query.customername
-   var  mobilenumber = req.query.phonenumber
-    invoicenumber = req.query.invoicenumber
+}
+function call_order_endpoint(fulfillment_id,order_id,callback){
+     url = 'https://api.tradegecko.com/orders/' + order_id + '.json'
+    console.log('url',url)
 
-    statuscode = '400'
-    var dt = dateTime.create();
-    var formatted = dt.format('Y-m-d H:M:S');
-
-    if(shipmentstatus && customername && mobilenumber && invoicenumber){
-        mobilenumber = '+' + mobilenumber //format the phonenumber to be sent in AT format
-
-        const data = {
-            to: mobilenumber,
-            message: "Hi there , "+customername+".Your order has been "+shipmentstatus + ", Shipment Number-"+ invoicenumber+". Thank you for shopping with MumsVillage"
+    request.get({
+        url, headers: {
+            "Authorization": ''
         }
-
-        console.log(data)
-
-        sms.send(data)
-            .then(resp => {
-                var arr = resp.SMSMessageData.Recipients
-
-
-
-                var cost = arr[0].cost
-               var messageid = arr[0].messageId
-                var phonenumber = arr[0].number
-                var status_response = arr[0].status
-               var status_code = arr[0].statusCode
+    }, function (err, res, body) {
+        if (err) //TODO: handle err
+            if (res.statusCode !== 200) { //etc
+                //TODO Do something with response
+            }
+        console.log('body',body)
+         return callback(null,body)
+    })
 
 
-
-                formatted_text = 'statuscode'+"\t"+status_code+"\t"+"recipent_number"+"\t"+phonenumber+"\t"+"cost"+"\t"+cost+"\t"+"messageid"+"\t"+messageid+"\t"+"timeStamp"+"\t"+formatted+"\n"
-
-                console.log(response);
-                fs.writeFile("smslogs.txt", formatted_text, { flag: "a" },function(err) {
-                    if(err) {
-                        return console.log(err);
-                    }
-
-                    console.log("The file was saved!");
-                });
-
-                response = {'statuscode':'200','response':resp}
-
-                res.end(response)
-
-            })
-            .catch(error => {
-
-                error_response = {'statuscode':'500', response:'error'}
-                res.end(error_response)
-            })
-
-    }
-
-    else{
-        bad_request = {'statuscode':'400','response':'Bad request'}
-        res.end(bad_request)
-
-
-    }
-
-
-
-
-
-});
-
+}
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 app.get('/',function(req,res){
     res.send('Server running ok')
 })
-
